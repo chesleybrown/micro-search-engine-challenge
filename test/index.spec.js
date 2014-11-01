@@ -1,5 +1,7 @@
 var expect = require('chai').expect;
 var request = require('supertest');
+var fakeWordList = require('./fake-word-list');
+var realWordList = require('word-list-json');
 
 describe('App Index', function () {
 	var server, app, response;
@@ -21,10 +23,11 @@ describe('App Index', function () {
 			;
 		});
 		
-		it('should respond with not found', function () {
+		it('should respond with not found', function (done) {
 			response.end(function (err, res) {
 				expect(res.status).to.equal(404);
 				expect(res.body).to.be.empty;
+				done();
 			});
 		});
 	});
@@ -37,10 +40,11 @@ describe('App Index', function () {
 				;
 			});
 			
-			it('should respond successfully', function () {
+			it('should respond successfully', function (done) {
 				response.end(function (err, res) {
 					expect(res.status).to.equal(200);
 					expect(res.body).to.have.length(0);
+					done();
 				});
 			});
 		});
@@ -52,10 +56,11 @@ describe('App Index', function () {
 				;
 			});
 			
-			it('should respond with invalid request', function () {
+			it('should respond with invalid request', function (done) {
 				response.end(function (err, res) {
 					expect(res.status).to.equal(400);
 					expect(res.body).to.be.empty;
+					done();
 				});
 			});
 		});
@@ -69,10 +74,11 @@ describe('App Index', function () {
 				;
 			});
 			
-			it('should respond with invalid request', function () {
+			it('should respond with invalid request', function (done) {
 				response.end(function (err, res) {
 					expect(res.status).to.equal(400);
 					expect(res.body).to.be.empty;
+					done();
 				});
 			});
 		});
@@ -85,10 +91,11 @@ describe('App Index', function () {
 				;
 			});
 			
-			it('should respond with invalid request', function () {
+			it('should respond with invalid request', function (done) {
 				response.end(function (err, res) {
 					expect(res.status).to.equal(400);
 					expect(res.body).to.be.empty;
+					done();
 				});
 			});
 		});
@@ -101,17 +108,52 @@ describe('App Index', function () {
 				;
 			});
 			
+			it('should respond with success and no results', function (done) {
+				response.end(function (err, res) {
+					expect(res.status).to.equal(204);
+					expect(res.body).to.be.empty;
+					done();
+				});
+			});
+			it('should have correct number of results', function (done) {
+				response.end(function (err, res) {
+					expect(server.dictionary).to.have.length(6);
+					done();
+				});
+			});
+			it('should have no duplicates and ignore object given and should all be lowercase', function (done) {
+				response.end(function (err, res) {
+					expect(server.dictionary).to.deep.equal(['foo', 'bar', 'chesley', 'test', 'barbie', 'chess']);
+					done();
+				});
+			});
+		});
+		
+		describe('and posting valid array of words but with a sentenced mixed in', function () {
+			beforeEach(function () {
+				response = request(app)
+					.post('/dictionary')
+					.send(['foo', 'bar', 'Chesley', 'chesley', 'test', 'barbie', 'this is a sentence', 'chess'])
+				;
+			});
+			
 			it('should respond with success and no results', function () {
 				response.end(function (err, res) {
 					expect(res.status).to.equal(204);
 					expect(res.body).to.be.empty;
 				});
 			});
-			it('should have correct number of results', function () {
-				expect(server.dictionary).to.have.length(6);
+			it('should have correct number of results', function (done) {
+				response.end(function (err, res) {
+					expect(server.dictionary).to.have.length(6);
+					done();
+				});
 			});
-			it('should have no duplicates and ignore object given and should all be lowercase', function () {
-				expect(server.dictionary).to.deep.equal(['foo', 'bar', 'chesley', 'test', 'barbie', 'chess']);
+			it('should have no duplicates and ignore object given and should all be lowercase', function (done) {
+				response.end(function (err, res) {
+					expect(server.dictionary).to.deep.equal(['foo', 'bar', 'chesley', 'test', 'barbie', 'chess']);
+					done();
+				});
 			});
 		});
 		
@@ -123,17 +165,24 @@ describe('App Index', function () {
 				;
 			});
 			
-			it('should respond with success and no results', function () {
+			it('should respond with success and no results', function (done) {
 				response.end(function (err, res) {
 					expect(res.status).to.equal(204);
 					expect(res.body).to.be.empty;
+					done();
 				});
 			});
-			it('should have correct number of results', function () {
-				expect(server.dictionary).to.have.length(6);
+			it('should have correct number of results', function (done) {
+				response.end(function (err, res) {
+					expect(server.dictionary).to.have.length(6);
+					done();
+				});
 			});
-			it('should have no duplicates and should all be lowercase', function () {
-				expect(server.dictionary).to.deep.equal(['foo', 'bar', 'chesley', 'test', 'barbie', 'chess']);
+			it('should have no duplicates and should all be lowercase', function (done) {
+				response.end(function (err, res) {
+					expect(server.dictionary).to.deep.equal(['foo', 'bar', 'chesley', 'test', 'barbie', 'chess']);
+					done();
+				});
 			});
 			
 			describe('then using search api', function () {
@@ -145,10 +194,11 @@ describe('App Index', function () {
 							;
 						});
 						
-						it('should respond with success and no results', function () {
+						it('should respond with success and no results', function (done) {
 							response.end(function (err, res) {
 								expect(res.status).to.equal(200);
 								expect(res.body).to.have.length(0);
+								done();
 							});
 						});
 					});
@@ -160,11 +210,12 @@ describe('App Index', function () {
 							;
 						});
 						
-						it('should respond with success and one result', function () {
+						it('should respond with success and one result', function (done) {
 							response.end(function (err, res) {
 								expect(res.status).to.equal(200);
 								expect(res.body).to.have.length(1);
 								expect(res.body[0]).to.equal('test');
+								done();
 							});
 						});
 					});
@@ -176,12 +227,13 @@ describe('App Index', function () {
 							;
 						});
 						
-						it('should respond with success and two results', function () {
+						it('should respond with success and two results', function (done) {
 							response.end(function (err, res) {
 								expect(res.status).to.equal(200);
 								expect(res.body).to.have.length(2);
 								expect(res.body[0]).to.equal('bar');
 								expect(res.body[1]).to.equal('barbie');
+								done();
 							});
 						});
 					});
@@ -193,16 +245,18 @@ describe('App Index', function () {
 							;
 						});
 						
-						it('should respond with success and two results', function () {
+						it('should respond with success and two results', function (done) {
 							response.end(function (err, res) {
 								expect(res.status).to.equal(200);
 								expect(res.body).to.have.length(2);
+								done();
 							});
 						});
-						it('should have results in lower case', function () {
+						it('should have results in lower case', function (done) {
 							response.end(function (err, res) {
 								expect(res.body[0]).to.equal('chesley');
 								expect(res.body[1]).to.equal('chess');
+								done();
 							});
 						});
 					});
@@ -215,12 +269,59 @@ describe('App Index', function () {
 						;
 					});
 					
-					it('should respond with invalid request', function () {
+					it('should respond with invalid request', function (done) {
 						response.end(function (err, res) {
 							expect(res.status).to.equal(400);
 							expect(res.body).to.be.empty;
+							done();
 						});
 					});
+				});
+			});
+		});
+		
+		describe('and posting VERY large array of words', function () {
+			beforeEach(function () {
+				response = request(app)
+					.post('/dictionary')
+					.send(fakeWordList)
+				;
+			});
+			
+			it('should respond successfully', function (done) {
+				response.end(function (err, res) {
+					expect(res.status).to.equal(204);
+					expect(res.body).to.be.empty;
+					done();
+				});
+			});
+			it('should have correct number of results', function (done) {
+				response.end(function (err, res) {
+					expect(server.dictionary).to.have.length(168);
+					done();
+				});
+			});
+		});
+		
+		describe('and posting a real world array of words', function () {
+			beforeEach(function () {
+				response = request(app)
+					.post('/dictionary')
+					.send(realWordList)
+				;
+			});
+			
+			it('should respond successfully', function (done) {
+				response.end(function (err, res) {
+					expect(res.status).to.equal(204);
+					expect(res.body).to.be.empty;
+					done();
+				});
+			});
+			it('should have correct number of results', function (done) {
+				response.end(function (err, res) {
+					expect(server.dictionary).to.have.length(274907);
+					done();
 				});
 			});
 		});

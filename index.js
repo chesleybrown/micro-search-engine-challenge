@@ -10,7 +10,7 @@ module.exports.dictionary = [];
 module.exports.app = function () {
 	var app = express();
 	
-	app.use(bodyParser.json());
+	app.use(bodyParser.json({limit: '5mb'}));
 	
 	app.post('/dictionary', function (req, res) {
 		var result = [];
@@ -24,8 +24,8 @@ module.exports.app = function () {
 		var uniqueDictionary = {};
 		lazy(req.body)
 			.each(function (word) {
-				// only allow string words
-				if (typeof word === 'string') {
+				// only allow string words and don't allow any strings with spaces
+				if (typeof word === 'string' && !/\s/.test(word)) {
 					word = word.toLowerCase();
 					uniqueDictionary[word] = word;
 				}
