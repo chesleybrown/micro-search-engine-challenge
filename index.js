@@ -58,6 +58,7 @@ module.exports.app = function () {
 		
 		lazy(module.exports.dictionary)
 			.filter(function (word) {
+				// find words that begin with string given
 				return (word.indexOf(string) === 0);
 			})
 			.each(function (word) {
