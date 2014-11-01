@@ -324,6 +324,77 @@ describe('App Index', function () {
 					done();
 				});
 			});
+			
+			describe('then using search api', function () {
+				beforeEach(function (done) {
+					response.end(function (err, res) {
+						done();
+					});
+				});
+				
+				describe('and calling search api with string', function () {
+					describe('and result does NOT exist', function () {
+						beforeEach(function () {
+							response = request(app)
+								.get('/search/not-found')
+							;
+						});
+						
+						it('should respond with success and no results', function (done) {
+							response.end(function (err, res) {
+								expect(res.status).to.equal(200);
+								expect(res.body).to.have.length(0);
+								done();
+							});
+						});
+					});
+					
+					describe('and result does exist', function () {
+						beforeEach(function () {
+							response = request(app)
+								.get('/search/orangewoods')
+							;
+						});
+						
+						it('should respond with success and one result', function (done) {
+							response.end(function (err, res) {
+								expect(res.status).to.equal(200);
+								expect(res.body).to.have.length(1);
+								expect(res.body[0]).to.equal('orangewoods');
+								done();
+							});
+						});
+					});
+					
+					describe('and multiple results exist', function () {
+						beforeEach(function () {
+							response = request(app)
+								.get('/search/orange')
+							;
+						});
+						
+						it('should respond with success and two results', function (done) {
+							response.end(function (err, res) {
+								expect(res.status).to.equal(200);
+								expect(res.body).to.have.length(12);
+								expect(res.body[0]).to.equal('orange');
+								expect(res.body[1]).to.equal('oranger');
+								expect(res.body[2]).to.equal('oranges');
+								expect(res.body[3]).to.equal('orangey');
+								expect(res.body[4]).to.equal('orangest');
+								expect(res.body[5]).to.equal('orangery');
+								expect(res.body[6]).to.equal('orangerie');
+								expect(res.body[7]).to.equal('orangeade');
+								expect(res.body[8]).to.equal('orangeades');
+								expect(res.body[9]).to.equal('orangeries');
+								expect(res.body[10]).to.equal('orangewood');
+								expect(res.body[11]).to.equal('orangewoods');
+								done();
+							});
+						});
+					});
+				});
+			});
 		});
 	});
 })
