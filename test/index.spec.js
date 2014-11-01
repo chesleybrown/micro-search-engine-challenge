@@ -27,32 +27,51 @@ describe('App Index', function () {
 		});
 	});
 	
-	describe('when calling search api with string', function () {
-		beforeEach(function () {
-			response = request(server)
-				.get('/search/test')
-			;
+	describe('when using search api with an empty dictionary', function () {
+		describe('and calling search api with string', function () {
+			beforeEach(function () {
+				response = request(server)
+					.get('/search/test')
+				;
+			});
+			
+			it('should respond successfully', function () {
+				response.end(function (err, res) {
+					expect(res.status).to.equal(200);
+					expect(res.body).to.have.length(0);
+				});
+			});
 		});
 		
-		it('should respond successfully', function () {
-			response.end(function (err, res) {
-				expect(res.status).to.equal(200);
-				expect(res.body).to.have.length(0);
+		describe('and calling search api without a string', function () {
+			beforeEach(function () {
+				response = request(server)
+					.get('/search')
+				;
+			});
+			
+			it('should respond with invalid request', function () {
+				response.end(function (err, res) {
+					expect(res.status).to.equal(400);
+					expect(res.body).to.be.empty;
+				});
 			});
 		});
 	});
 	
-	describe('when calling search api without a string', function () {
-		beforeEach(function () {
-			response = request(server)
-				.get('/search')
-			;
-		});
-		
-		it('should respond with 400', function () {
-			response.end(function (err, res) {
-				expect(res.status).to.equal(400);
-				expect(res.body).to.be.empty;
+	describe('when populating dictionary', function () {
+		describe('and posting nothing', function () {
+			beforeEach(function () {
+				response = request(server)
+					.post('/dictionary')
+				;
+			});
+			
+			it('should respond with invalid request', function () {
+				response.end(function (err, res) {
+					expect(res.status).to.equal(400);
+					expect(res.body).to.be.empty;
+				});
 			});
 		});
 	});

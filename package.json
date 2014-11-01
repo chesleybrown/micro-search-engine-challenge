@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/chesleybrown/micro-search-engine-challenge",
   "dependencies": {
+    "body-parser": "^1.9.2",
     "express": "^4.10.1"
   },
   "devDependencies": {
