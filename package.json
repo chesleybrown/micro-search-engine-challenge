@@ -1,0 +1,23 @@
+{
+  "name": "micro-search-engine-challenge",
+  "version": "0.0.0",
+  "description": "A micro search engine concept",
+  "main": "index.js",
+  "scripts": {
+    "start": "index.js",
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:chesleybrown/micro-search-engine-challenge.git"
+  },
+  "author": "Chesley",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/chesleybrown/micro-search-engine-challenge/issues"
+  },
+  "homepage": "https://github.com/chesleybrown/micro-search-engine-challenge",
+  "dependencies": {
+    "express": "^4.10.1"
+  }
+}
