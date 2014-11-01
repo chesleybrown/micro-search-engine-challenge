@@ -16,8 +16,16 @@ module.exports = function () {
 		res.json(result);
 	});
 	
-	app.get('/search/:string', function (req, res) {
+	app.get('/search/:string?', function (req, res) {
 		var result = [];
+		var string = req.param('string');
+		
+		// must provide a valid string to search with
+		if (!string) {
+			res.status(400).end();
+			return;
+		}
+		
 		res.json(result);
 	});
 	

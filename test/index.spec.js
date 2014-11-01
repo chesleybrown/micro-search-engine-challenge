@@ -41,4 +41,19 @@ describe('App Index', function () {
 			});
 		});
 	});
+	
+	describe('when calling search api without a string', function () {
+		beforeEach(function () {
+			response = request(server)
+				.get('/search')
+			;
+		});
+		
+		it('should respond with 400', function () {
+			response.end(function (err, res) {
+				expect(res.status).to.equal(400);
+				expect(res.body).to.be.empty;
+			});
+		});
+	});
 })
