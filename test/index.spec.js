@@ -301,6 +301,50 @@ describe('App Index', function () {
 					done();
 				});
 			});
+			
+			describe('then using search api', function () {
+				beforeEach(function (done) {
+					response.end(function (err, res) {
+						done();
+					});
+				});
+				
+				describe('and calling search api 1500 times at once', function () {
+					// increase timeout to make 1500 requests in succession
+					this.timeout(10000);
+					
+					var completed;
+					var errors;
+					
+					beforeEach(function () {
+						completed = 0;
+						errors = [];
+					});
+					
+					it('should have no errors', function (done) {
+						var requests = 1500;
+						
+						(function next() {
+							response = request(app)
+								.get('/search/test')
+								.end(function (err, res) {
+									completed++;
+									if (err) {
+										errors.push(err);
+									}
+									if (completed === requests) {
+										expect(errors).to.be.empty;
+										done();
+									}
+									else {
+										next();
+									}
+								})
+							;
+						})();
+					});
+				});
+			});
 		});
 		
 		describe('and posting a real world array of words', function () {
