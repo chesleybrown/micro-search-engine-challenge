@@ -4,8 +4,8 @@
   "description": "A micro search engine concept",
   "main": "index.js",
   "scripts": {
-    "start": "index.js",
-    "test": "test"
+    "start": "node index.js listen",
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -19,5 +19,10 @@
   "homepage": "https://github.com/chesleybrown/micro-search-engine-challenge",
   "dependencies": {
     "express": "^4.10.1"
+  },
+  "devDependencies": {
+    "mocha": "^2.0.1",
+    "chai": "^1.9.2",
+    "supertest": "^0.14.0"
   }
 }
