@@ -13,6 +13,14 @@ Just need to install the node modules:
 npm install
 ```
 
+# Tests
+
+To execute all the tests, just run:
+
+```
+npm test
+```
+
 # Running
 
 Server runs on port `8000` by default, but will use the port set
