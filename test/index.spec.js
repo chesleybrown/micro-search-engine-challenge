@@ -74,5 +74,37 @@ describe('App Index', function () {
 				});
 			});
 		});
+		
+		describe('and posting invalid data', function () {
+			beforeEach(function () {
+				response = request(server)
+					.post('/dictionary')
+					.send({'test': 'not-an-array'})
+				;
+			});
+			
+			it('should respond with invalid request', function () {
+				response.end(function (err, res) {
+					expect(res.status).to.equal(400);
+					expect(res.body).to.be.empty;
+				});
+			});
+		});
+		
+		describe('and posting valid array of words', function () {
+			beforeEach(function () {
+				response = request(server)
+					.post('/dictionary')
+					.send(['foo', 'bar', 'chesley', 'test'])
+				;
+			});
+			
+			it('should respond with success', function () {
+				response.end(function (err, res) {
+					expect(res.status).to.equal(204);
+					expect(res.body).to.be.empty;
+				});
+			});
+		});
 	});
 })

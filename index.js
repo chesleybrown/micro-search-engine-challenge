@@ -4,18 +4,24 @@ var bodyParser = require('body-parser');
 module.exports = function () {
 	var app = express();
 	
+	// typically you'd want to store this in something
+	// that would retain state (datastore), but for simplicity
+	// just going to store it in memory
+	var dictionary = [];
+	
 	app.use(bodyParser.json());
 	
 	app.post('/dictionary', function (req, res) {
 		var result = [];
-		var dictionary = res.body;
 		
-		if (!Array.isArray(dictionary)) {
+		if (!Array.isArray(req.body)) {
 			res.status(400).end();
 			return;
 		}
 		
-		res.json(result);
+		dictionary = res.body;
+		
+		res.status(204).end();
 	});
 	
 	app.get('/search/:string?', function (req, res) {
