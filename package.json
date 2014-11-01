@@ -19,7 +19,8 @@
   "homepage": "https://github.com/chesleybrown/micro-search-engine-challenge",
   "dependencies": {
     "body-parser": "^1.9.2",
-    "express": "^4.10.1"
+    "express": "^4.10.1",
+    "lazy.js": "^0.3.2"
   },
   "devDependencies": {
     "mocha": "^2.0.1",

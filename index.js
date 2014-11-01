@@ -1,13 +1,14 @@
 var express = require('express');
 var bodyParser = require('body-parser');
+var lazy = require('lazy.js');
 
-module.exports = function () {
+// typically you'd want to store this in something
+// that would retain state (datastore), but for simplicity
+// just going to store it in memory
+module.exports.dictionary = [];
+
+module.exports.app = function () {
 	var app = express();
-	
-	// typically you'd want to store this in something
-	// that would retain state (datastore), but for simplicity
-	// just going to store it in memory
-	var dictionary = [];
 	
 	app.use(bodyParser.json());
 	
@@ -19,7 +20,28 @@ module.exports = function () {
 			return;
 		}
 		
-		dictionary = res.body;
+		// validate data given, convert all words to lowercase
+		var uniqueDictionary = {};
+		lazy(req.body)
+			.each(function (word) {
+				// only allow string words
+				if (typeof word === 'string') {
+					word = word.toLowerCase();
+					uniqueDictionary[word] = word;
+				}
+			})
+		;
+		
+		// clear
+		module.exports.dictionary = [];
+		
+		// flatten into simple array dictionary
+		lazy(uniqueDictionary)
+			.flatten()
+			.each(function (word) {
+				module.exports.dictionary.push(word);
+			})
+		;
 		
 		res.status(204).end();
 	});
@@ -33,6 +55,15 @@ module.exports = function () {
 			res.status(400).end();
 			return;
 		}
+		
+		lazy(module.exports.dictionary)
+			.filter(function (word) {
+				return (word.indexOf(string) === 0);
+			})
+			.each(function (word) {
+				result.push(word);
+			})
+		;
 		
 		res.json(result);
 	});
@@ -53,7 +84,7 @@ if (listen) {
 	// get port using environment variable or use default 8000
 	var port = (process.env.PORT) ? process.env.PORT : 8000;
 	
-	var server = module.exports().listen(port, function () {
+	var server = module.exports.app().listen(port, function () {
 		var host = server.address().address;
 		console.log('Listening at http://%s:%s', host, port)
 	});
