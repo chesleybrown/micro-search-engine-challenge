@@ -74,7 +74,7 @@ module.exports.app = function () {
 
 var listen;
 
-// basic arg parse so we can server initializing into the same file as the app module
+// basic arg parse so we can have server initializing in the same file as the app module
 process.argv.forEach(function (val, index, array) {
 	if (index === 2 && val == 'listen') {
 		listen = true;
