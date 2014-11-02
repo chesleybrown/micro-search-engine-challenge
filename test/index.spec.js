@@ -417,7 +417,7 @@ describe('App Index', function () {
 							;
 						});
 						
-						it('should respond with success and two results', function (done) {
+						it('should respond with success and correct results', function (done) {
 							response.end(function (err, res) {
 								expect(res.status).to.equal(200);
 								expect(res.body).to.have.length(12);
