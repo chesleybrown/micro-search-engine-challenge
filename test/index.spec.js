@@ -220,6 +220,22 @@ describe('App Index', function () {
 						});
 					});
 					
+					describe('and word exists, but does not begin with string given', function () {
+						beforeEach(function () {
+							response = request(app)
+								.get('/search/hesley')
+							;
+						});
+						
+						it('should respond with success and one result', function (done) {
+							response.end(function (err, res) {
+								expect(res.status).to.equal(200);
+								expect(res.body).to.have.length(0);
+								done();
+							});
+						});
+					});
+					
 					describe('and multiple results exist', function () {
 						beforeEach(function () {
 							response = request(app)
