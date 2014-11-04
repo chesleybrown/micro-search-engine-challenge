@@ -149,7 +149,7 @@ describe('App Index', function () {
 					done();
 				});
 			});
-			it('should have no duplicates and ignore object given and should all be lowercase', function (done) {
+			it('should have no duplicates and ignore sentence given and should all be lowercase', function (done) {
 				response.end(function (err, res) {
 					expect(server.dictionary).to.deep.equal(['foo', 'bar', 'chesley', 'test', 'barbie', 'chess']);
 					done();
