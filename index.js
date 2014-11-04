@@ -56,6 +56,9 @@ module.exports.app = function () {
 			return;
 		}
 		
+		// convert to lowercase for searching
+		string = string.toLowerCase();
+		
 		lazy(module.exports.dictionary)
 			.filter(function (word) {
 				// find words that begin with string given

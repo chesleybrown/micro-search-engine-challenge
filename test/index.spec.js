@@ -220,6 +220,23 @@ describe('App Index', function () {
 						});
 					});
 					
+					describe('and result does exist, but passed in CAPS', function () {
+						beforeEach(function () {
+							response = request(app)
+								.get('/search/Test')
+							;
+						});
+						
+						it('should respond with success and one result', function (done) {
+							response.end(function (err, res) {
+								expect(res.status).to.equal(200);
+								expect(res.body).to.have.length(1);
+								expect(res.body[0]).to.equal('test');
+								done();
+							});
+						});
+					});
+					
 					describe('and word exists, but does not begin with string given', function () {
 						beforeEach(function () {
 							response = request(app)
